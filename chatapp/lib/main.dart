@@ -7,18 +7,16 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (kIsWeb) {
     await Firebase.initializeApp(
-      options: FirebaseOptions(apiKey: "AIzaSyDny6AIjtCZAfdLWMkZSgApkFe0jGOffTQ",
-  authDomain: Constants.authDomain,
-  projectId: Constants.projectId,
-  storageBucket: Constants.storageBucket,
-  messagingSenderId: Constants.messagingSenderId,
-  appId: Constants.appId,
-  measurementId: Constants.measurementId)
-  
-  );
+        options: FirebaseOptions(
+            apiKey: "AIzaSyDny6AIjtCZAfdLWMkZSgApkFe0jGOffTQ",
+            authDomain: Constants.authDomain,
+            projectId: Constants.projectId,
+            storageBucket: Constants.storageBucket,
+            messagingSenderId: Constants.messagingSenderId,
+            appId: Constants.appId,
+            measurementId: Constants.measurementId));
   } else {
-    
-  await Firebase.initializeApp();
+    await Firebase.initializeApp();
   }
 
   runApp(const MyApp());
@@ -34,6 +32,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return MaterialApp(
+      
+    );
   }
 }
