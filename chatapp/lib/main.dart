@@ -1,7 +1,11 @@
+import 'package:chatapp/helper/helper_funtion.dart';
+import 'package:chatapp/pages/homepage.dart';
 import 'package:chatapp/shared/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+
+import 'pages/auth/login_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,10 +34,26 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  bool _isSignedIn = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserLoggedInStatus();
+  }
+
+  getUserLoggedInStatus() async {
+    await HelperFuntion.getUserLoggedInStatus().then((value) {
+      if (value != null) {
+        _isSignedIn = value;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      
+      home: _isSignedIn ?const HomePage():const LogIn(),
     );
   }
 }
