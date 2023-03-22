@@ -1,4 +1,6 @@
+import 'package:chatapp/helper/helper_funtion.dart';
 import 'package:chatapp/pages/auth/login_page.dart';
+import 'package:chatapp/pages/homepage.dart';
 import 'package:chatapp/service/auth_service.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -97,8 +99,8 @@ class _RegisterPageState extends State<RegisterPage> {
                               return RegExp(
                                           r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+0[a-zA-Z0-9]+\.[a-zA-Z]+")
                                       .hasMatch(value!)
-                                  ? null
-                                  : "Please enter a valid email";
+                                  ? "Please enter a valid email"
+                                  : null;
                             },
                           ),
                           SizedBox(
@@ -179,9 +181,13 @@ class _RegisterPageState extends State<RegisterPage> {
       });
       await authService
           .registerUserWithEmailandPassword(fullName, email, password)
-          .then((value) {
+          .then((value) async {
         if (value == true) {
           //saving the shared prefrence state
+          await HelperFuntion.saveUserLoggedInStatus(true);
+          await HelperFuntion.saveUserEmailSF(email);
+          await HelperFuntion.saveUserNameSF(fullName);
+          nextScreenReplace(context, const HomePage());
         } else {
           showSnackbar(context, Colors.red, value);
           setState(() {
