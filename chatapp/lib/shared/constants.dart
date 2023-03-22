@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Constants {
   static String authDomain = "chatapp-5c35a.firebaseapp.com";
   static String storageBucket = "chatapp-5c35a.appspot.com";
@@ -6,4 +8,5 @@ class Constants {
   static String messagingSenderId = "553209416106";
   static String projectId = "chatapp-5c35a";
   static String measurementId = "G-Y5EC75L61V";
+  final primaryColor = const Color(0xFFee7b64);
 }
