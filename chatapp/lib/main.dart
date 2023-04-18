@@ -1,5 +1,6 @@
 import 'package:chatapp/helper/helper_funtion.dart';
 import 'package:chatapp/pages/homepage.dart';
+import 'package:chatapp/pages/profilepage.dart';
 import 'package:chatapp/shared/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -58,8 +59,8 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primaryColor: Constants().primaryColor,
       scaffoldBackgroundColor: Colors.white),
-     
-      home: _isSignedIn ?const HomePage():const LogIn(),
+      home: ProfilePage(email: '',userName: '',)
+      // home: _isSignedIn ?const HomePage():const LogIn(),
     );
   }
 }

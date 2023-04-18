@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:chatapp/helper/helper_funtion.dart';
 import 'package:chatapp/pages/auth/login_page.dart';
