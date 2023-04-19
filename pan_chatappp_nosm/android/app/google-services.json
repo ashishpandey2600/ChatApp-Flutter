@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "693485568136",
+    "project_id": "panchat-66449",
+    "storage_bucket": "panchat-66449.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:693485568136:android:fba63ed10fed6c154e1f3d",
+        "android_client_info": {
+          "package_name": "com.example.pan_chatappp_nosm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "693485568136-fdm6kvvpld3rgpahiajq8v0hkg4fjle8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArIkxxhQ8bqsaS8C_ftLZ-Rb9q9mxNsvQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "693485568136-fdm6kvvpld3rgpahiajq8v0hkg4fjle8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
