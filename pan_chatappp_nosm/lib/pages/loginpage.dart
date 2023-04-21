@@ -7,6 +7,8 @@ import 'package:pan_chatappp_nosm/models/usermodel.dart';
 import 'package:pan_chatappp_nosm/pages/homepage.dart';
 import 'package:pan_chatappp_nosm/pages/signuppage.dart';
 
+import '../models/uihelper.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -102,10 +104,17 @@ class _LoginPageState extends State<LoginPage> {
 
   void login(String email, String password) async {
     UserCredential? credential;
+    UiHelper.showLoadingdialog(context, "Logging In..");
     try {
       credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
+      // Close the loading Dialog
+
+      Navigator.pop(context);
+
+      UiHelper.showAlerDialog(
+          context, "An error Occured", e.message.toString());
       print(e.message.toString());
     }
     if (credential != null) {
@@ -116,7 +125,13 @@ class _LoginPageState extends State<LoginPage> {
       Map<String, dynamic> map = userData.data() as Map<String, dynamic>;
       UserModel userModel = UserModel.fromMap(map);
 
+      Navigator.popUntil(context, (route) => route.isFirst);
       //Go to HomePage
+      Navigator.pushReplacement(
+          context,
+          CupertinoPageRoute(
+              builder: (context) => HomePage(
+                  firebaseuser: credential!.user!, userModel: userModel)));
     }
   }
 }

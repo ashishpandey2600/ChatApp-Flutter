@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pan_chatappp_nosm/models/uihelper.dart';
 import 'package:pan_chatappp_nosm/models/usermodel.dart';
 import 'package:pan_chatappp_nosm/pages/completeprofile.dart';
 
@@ -25,9 +26,11 @@ class _SignupPageState extends State<SignupPage> {
     String password = passwordController.text.trim();
     String cnfpassword = confirmpasswordController.text.trim();
     if (email == "" || password == "" || cnfpassword == "") {
-      print("please fill all the field");
+      UiHelper.showAlerDialog(
+          context, "Incomplete Data", "Please fill all the fields");
     } else if (password != cnfpassword) {
-      print("Password do not match");
+      UiHelper.showAlerDialog(context, "Password Mismatch",
+          "The passwords you entered do not match!");
     } else {
       signup(email, password);
     }
@@ -35,23 +38,29 @@ class _SignupPageState extends State<SignupPage> {
 
   void signup(String email, String password) async {
     UserCredential? credential;
+    UiHelper.showLoadingdialog(context, "Creating new account..");
     try {
       credential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
-      print(e.code.toString());
+      Navigator.pop(context); //Stops the loading dialog
+
+      UiHelper.showAlerDialog(
+          context, "An error occured", e.message.toString());
     }
     if (credential != null) {
       String uid = credential.user!.uid;
-      UserModel newUser = UserModel(
-          uid: uid, email: email, fullname: "", profilepic: "");
+      UserModel newUser =
+          UserModel(uid: uid, email: email, fullname: "", profilepic: "");
       await FirebaseFirestore.instance
           .collection("users")
           .doc(uid)
           .set(newUser.toMap())
           .then((value) {
         print("New user created");
-        Navigator.push(context, CupertinoPageRoute(builder: (context) {
+        Navigator.popUntil(context, (route) => route.isFirst);
+        Navigator.pushReplacement(context,
+            CupertinoPageRoute(builder: (context) {
           return CompleteProfile(
               userModel: newUser, firebaseuser: credential!.user!);
         }));

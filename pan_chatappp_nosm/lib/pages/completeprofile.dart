@@ -7,12 +7,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pan_chatappp_nosm/models/uihelper.dart';
 import 'package:pan_chatappp_nosm/models/usermodel.dart';
 import 'package:pan_chatappp_nosm/pages/homepage.dart';
 
 class CompleteProfile extends StatefulWidget {
-  final UserModel? userModel;
-  final User? firebaseuser;
+  final UserModel userModel;
+  final User firebaseuser;
   const CompleteProfile(
       {super.key, required this.userModel, required this.firebaseuser});
 
@@ -41,7 +42,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
     if (croppedImage != null) {
       setState(() {
         imageFile = File(croppedImage
-            .path); //check for this must be imageFile = cropped file
+            .path); 
       });
     }
   }
@@ -77,31 +78,48 @@ class _CompleteProfileState extends State<CompleteProfile> {
   void checkvalues() {
     String fullname = fullNameController.text.trim();
     if (fullname == "" || imageFile == null) {
-      print("please fill the fields");
+      UiHelper.showAlerDialog(context, "Incomplete Data ",
+          "please fill all the fields and upload a profile picture");
     } else {
       uploadData();
     }
   }
 
   void uploadData() async {
+    // Reference ref = FirebaseStorage.instance
+    //     .ref()
+    //     .child('profilepic')
+    //     .child(widget.userModel!.uid.toString());
+    // UploadTask uploadTask = ref.putFile(imageFile!);
+    // final snapshot = await uploadTask.whenComplete(() => null);
+
+    UiHelper.showLoadingdialog(context, "Uploading image..");
+
     UploadTask uploadTask = FirebaseStorage.instance
-        .ref("profilepictures")
-        .child(widget.userModel!.uid.toString())
+        .ref("profilepic")
+        .child(widget.userModel.uid.toString())
         .putFile(imageFile!);
 
+    // final storageRef = FirebaseStorage.instance.ref();
+    // final mountainsRef = storageRef.child("mountains.jpg");
+    // final mountainImagesRef = storageRef.child("profilepic/mountains.jpg");
+
+    // final uploadTask =
+    //     storageRef.child("profilepic/mountains.jpg").putFile(imageFile!);
     TaskSnapshot snapshot = await uploadTask;
     String? imageUrl = await snapshot.ref.getDownloadURL();
     String? fullname = fullNameController.text.trim();
 
-    widget.userModel!.fullname = fullname;
-    widget.userModel!.profilepic = imageUrl;
+    widget.userModel.fullname = fullname;
+    widget.userModel.profilepic = imageUrl;
 
     await FirebaseFirestore.instance
         .collection("users")
-        .doc(widget.userModel!.uid)
-        .set(widget.userModel!.toMap())
+        .doc(widget.userModel.uid)
+        .set(widget.userModel.toMap())
         .then((value) {
-      Navigator.push(
+      Navigator.popUntil(context, (route) => route.isFirst);
+      Navigator.pushReplacement(
           context,
           CupertinoPageRoute(
               builder: (context) => HomePage(
@@ -153,7 +171,9 @@ class _CompleteProfileState extends State<CompleteProfile> {
             CupertinoButton(
               child: const Text("Submit", style: TextStyle(fontSize: 16)),
               color: Theme.of(context).colorScheme.secondary,
-              onPressed: () {},
+              onPressed: () {
+                checkvalues();
+              },
             ),
           ],
         ),
